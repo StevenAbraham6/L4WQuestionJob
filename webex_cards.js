@@ -146,8 +146,8 @@ let updateStatus = function(recordId,status,question,messageId="ERROR"){
 }
 
 
-// /* Handler function starts here */
-// exports.handler = function(event, context, callback){
+/* Handler function starts here */
+exports.handler = function(event, context, callback){
 
   Airtable.configure({
     apiKey: "keyoPw1vi0AN2TbIP"
@@ -242,8 +242,8 @@ let updateStatus = function(recordId,status,question,messageId="ERROR"){
     filterByFormula: 'OR({Q1_STATUS} = "PENDING",{Q2_STATUS} = "PENDING",{Q3_STATUS} = "PENDING",{Q4_STATUS} = "PENDING",{Q5_STATUS} = "PENDING",{Q6_STATUS} = "PENDING",{Q7_STATUS} = "PENDING",{Q8_STATUS} = "PENDING",{Q9_STATUS} = "PENDING",{Q10_STATUS} = "PENDING")'
   }).eachPage(processPage, processRecords)
 
-//   callback(null,event)
-// }
+  callback(null,event)
+}
 
 
 
