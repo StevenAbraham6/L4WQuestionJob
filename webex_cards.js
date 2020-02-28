@@ -4,6 +4,7 @@
 Ciscospark  = require('ciscospark/env');
 CiscoSpark = require('ciscospark')
 const Airtable = require('airtable')
+var moment = require('moment-timezone');
 
 
 
@@ -14,8 +15,6 @@ let sendMessage = function(attachments, email, recordId, question){
     const spark1 = new CiscoSpark({
       credentials: process.env.CISCOSPARK_ACCESS_TOKEN
   });
-  console.log("In send message")
-  console.log(attachments)
   txt="Oops! Something went wrong 😕."
   spark1.messages.create({
     text: "",
@@ -148,7 +147,7 @@ let updateStatus = function(recordId,status,question,messageId="ERROR"){
 
 
 // /* Handler function starts here */
-exports.handler = function(event, context, callback){
+// exports.handler = function(event, context, callback){
 
   Airtable.configure({
     apiKey: "keyoPw1vi0AN2TbIP"
@@ -180,59 +179,58 @@ exports.handler = function(event, context, callback){
     }
 
     //process the `records` array
-    // use For - - - - bluebird promise. map series // make async funciton send message .. prefix sendmessage with await  // 
     records.forEach(function(record){
 
-      var launchDate = new Date(record.get("Q1_DATE"));
-      var now = new Date();
+      var launchDate = moment.tz(record.get("Q1_DATE"),"MMMM Do YYYY, h:mm:ss a",record.get("TIMEZONE"));
+      var now = moment().tz(record.get("TIMEZONE"))
 
       //check if pending and then date
       if(record.get("Q1_STATUS")=="PENDING")
         if(launchDate<now)
           sendMessage(record.get("Q1_TEXT_JSON"), record.get("SE_EMAIL"), record.getId(), "Q1")
       
-      launchDate = new Date(record.get("Q2_DATE"));    
+      launchDate = moment.tz(record.get("Q2_DATE"),"MMMM Do YYYY, h:mm:ss a",record.get("TIMEZONE")); 
       if(record.get("Q2_STATUS")=="PENDING")
         if(launchDate<now)
           sendMessage(record.get("Q2_TEXT_JSON"), record.get("SE_EMAIL"), record.getId(), "Q2") 
-          
-      launchDate = new Date(record.get("Q3_DATE"));    
+           
+      launchDate = moment.tz(record.get("Q3_DATE"),"MMMM Do YYYY, h:mm:ss a",record.get("TIMEZONE"));    
       if(record.get("Q3_STATUS")=="PENDING")
         if(launchDate<now)
           sendMessage(record.get("Q3_TEXT_JSON"), record.get("SE_EMAIL"), record.getId(), "Q3")       
-            
-      launchDate = new Date(record.get("Q4_DATE"));    
+             
+      launchDate = moment.tz(record.get("Q4_DATE"),"MMMM Do YYYY, h:mm:ss a",record.get("TIMEZONE")); 
       if(record.get("Q4_STATUS")=="PENDING")
         if(launchDate<now)
           sendMessage(record.get("Q4_TEXT_JSON"), record.get("SE_EMAIL"), record.getId(), "Q4") 
           
-      launchDate = new Date(record.get("Q5_DATE"));    
+      launchDate = moment.tz(record.get("Q5_DATE"),"MMMM Do YYYY, h:mm:ss a",record.get("TIMEZONE")); 
       if(record.get("Q5_STATUS")=="PENDING")
         if(launchDate<now)
           sendMessage(record.get("Q5_TEXT_JSON"), record.get("SE_EMAIL"), record.getId(), "Q5")    
           
-      launchDate = new Date(record.get("Q6_DATE"));    
+      launchDate = moment.tz(record.get("Q6_DATE"),"MMMM Do YYYY, h:mm:ss a",record.get("TIMEZONE"));     
       if(record.get("Q6_STATUS")=="PENDING")
         if(launchDate<now)
           sendMessage(record.get("Q6_TEXT_JSON"), record.get("SE_EMAIL"), record.getId(), "Q6") 
           
-      launchDate = new Date(record.get("Q7_DATE"));    
+      launchDate = moment.tz(record.get("Q7_DATE"),"MMMM Do YYYY, h:mm:ss a",record.get("TIMEZONE")); 
       if(record.get("Q7_STATUS")=="PENDING")
         if(launchDate<now)
           sendMessage(record.get("Q7_TEXT_JSON"), record.get("SE_EMAIL"), record.getId(), "Q7")       
             
-      launchDate = new Date(record.get("Q8_DATE"));    
+      launchDate = moment.tz(record.get("Q8_DATE"),"MMMM Do YYYY, h:mm:ss a",record.get("TIMEZONE")); 
       if(record.get("Q8_STATUS")=="PENDING")
         if(launchDate<now)
           sendMessage(record.get("Q8_TEXT_JSON"), record.get("SE_EMAIL"), record.getId(), "Q8") 
           
-      launchDate = new Date(record.get("Q9_DATE"));    
+      launchDate = moment.tz(record.get("Q9_DATE"),"MMMM Do YYYY, h:mm:ss a",record.get("TIMEZONE")); 
       if(record.get("Q9_STATUS")=="PENDING")
         if(launchDate<now)
           sendMessage(record.get("Q9_TEXT_JSON"), record.get("SE_EMAIL"), record.getId(), "Q9")    
  
                     
-      launchDate = new Date(record.get("Q10_DATE"));    
+      launchDate = moment.tz(record.get("Q10_DATE"),"MMMM Do YYYY, h:mm:ss a",record.get("TIMEZONE")); 
       if(record.get("Q10_STATUS")=="PENDING")
         if(launchDate<now)
           sendMessage(record.get("Q10_TEXT_JSON"), record.get("SE_EMAIL"), record.getId(), "Q10")  
@@ -244,8 +242,8 @@ exports.handler = function(event, context, callback){
     filterByFormula: 'OR({Q1_STATUS} = "PENDING",{Q2_STATUS} = "PENDING",{Q3_STATUS} = "PENDING",{Q4_STATUS} = "PENDING",{Q5_STATUS} = "PENDING",{Q6_STATUS} = "PENDING",{Q7_STATUS} = "PENDING",{Q8_STATUS} = "PENDING",{Q9_STATUS} = "PENDING",{Q10_STATUS} = "PENDING")'
   }).eachPage(processPage, processRecords)
 
-  callback(null,event)
-}
+//   callback(null,event)
+// }
 
 
 
