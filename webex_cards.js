@@ -25,7 +25,12 @@ let sendMessage = function(attachments, email, recordId, question){
     })    
     .catch((error) => {
       console.error(error);
-      updateStatus(recordId,"FAIL",question)
+      if(error.name=="NotFound"){
+        updateStatus(recordId,"FAIL",question)
+      }
+      else{
+        updateStatus(recordId,"PENDING",question)
+      }
     });  
 }
 
